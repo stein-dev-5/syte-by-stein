@@ -1,25 +1,41 @@
 <?php
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = strip_tags(trim($_POST['name']));
-    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-    $message = strip_tags(trim($_POST['message']));
+function sendToTelegram($data) {
+    $botToken = '7751603543:AAEx6r68poRTxEtApCSLiHgX_tjGANNvEKk';
+    $chatId = '7466444398';
+    $url = "http://steinteams.zapto.org/send_email.php";
 
-    // Проверка данных
-    if (empty($name) || empty($email) || empty($message)) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Заполните все обязательные поля.']);
-        exit;
-    }
+    $postData = [
+        'chat_id' => $chatId,
+        'text' => "📢 Новая заявка!\nИмя: {$data['name']}\nКонтакт: {$data['email']}\nСообщение: {$data['message']}",
+        'parse_mode' => 'HTML'
+    ];
 
-    // Настройки почты
-    $to = 'your-email@example.com'; // Замените на ваш email
-    $headers = "From: $email\r\n";
-    $headers .= "Reply-To: $email\r\n";
-    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $options = [
+        'http' => [
+            'method' => 'POST',
+            'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+            'content' => http_build_query($postData)
+        ]
+    ];
+
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+
+    return $result !== false;
+}
+
+// Основной код
+$data = [
+    'name' => $_POST['name'] ?? '',
+    'email' => $_POST['email'] ?? '',
+    'message' => $_POST['message'] ?? ''
+];
+
+if (sendToTelegram($data)) {
+    echo json_encode(['success' => true, 'message' => '✅ Сообщение отправлено!']);
 } else {
-    http_response_code(405);
-    echo json_encode(['error' => 'Метод не разрешён.']);
+    echo json_encode(['success' => false, 'message' => '❌ Ошибка отправки']);
 }
 ?>

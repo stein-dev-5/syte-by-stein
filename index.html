@@ -61,7 +61,7 @@
                     <div class="service-icon">
                         <i class="fas fa-map-marked-alt"></i>
                     </div>
-                    <h3>Профессиональный маппинг</h3>
+                    <h3>Грамотный маппинг</h3>
                     <p>Создание уникальных карт и локаций для вашего сервера с высокой детализацией и оптимизацией. Импорт карт из различных модов GTA.</p>
                     <ul class="service-features">
                         <li>Кастомные интерьеры и экстерьеры</li>
@@ -224,7 +224,7 @@
             <div class="about-content">
                 <div class="about-text">
                     <h2>Почему выбирают SteinTeams?</h2>
-                    <p>Мы - команда профессиональных разработчиков с более чем 3-летним опытом создания серверов GTA 5. Наша специализация - это качественные и уникальные проекты, которые выделяются на фоне других.</p>
+                    <p>Мы - команда разработчиков с более чем 3-летним опытом создания серверов GTA 5. Наша специализация - это качественные и уникальные проекты, которые выделяются на фоне других.</p>
                     <p>Мы не просто делаем сервера - мы создаем грамотные продукты с продуманной экономикой, интересными механиками и запоминающейся атмосферой.</p>
                     <p>Наши клиенты получают не только технически совершенный продукт, но и постоянную поддержку, обновления и помощь в развитии проекта.</p>
                     
@@ -378,3 +378,27 @@
     <script src="js/script.js"></script>
 </body>
 </html>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const messageDiv = document.getElementById('form-message');
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        messageDiv.textContent = data.message;
+        messageDiv.style.color = data.success ? 'green' : 'red';
+        if (data.success) form.reset();
+    })
+    .catch(error => {
+        messageDiv.textContent = 'Ошибка сети. Попробуйте ещё раз.';
+        messageDiv.style.color = 'red';
+    });
+});
+</script>
