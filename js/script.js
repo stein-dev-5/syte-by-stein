@@ -1,4 +1,3 @@
-// Mobile menu toggle
 const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
 const navLinks = document.querySelector('.nav-links');
         
@@ -8,7 +7,6 @@ mobileMenuBtn.addEventListener('click', () => {
         '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
 });
 
-// Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -24,7 +22,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Add shadow to header on scroll
 window.addEventListener('scroll', () => {
     const header = document.querySelector('header');
     if (window.scrollY > 10) {
@@ -32,8 +29,7 @@ window.addEventListener('scroll', () => {
     } else {
         header.classList.remove('scrolled');
     }
-    
-    // Back to top button
+
     const backToTop = document.querySelector('.back-to-top');
     if (window.scrollY > 300) {
         backToTop.classList.add('active');
@@ -42,28 +38,22 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Map tabs functionality
 const mapTabs = document.querySelectorAll('.map-tab');
 mapTabs.forEach(tab => {
     tab.addEventListener('click', () => {
-        // Remove active class from all tabs
         mapTabs.forEach(t => t.classList.remove('active'));
         
-        // Add active class to clicked tab
         tab.classList.add('active');
         
-        // Hide all map contents
         document.querySelectorAll('.map-content').forEach(content => {
             content.classList.remove('active');
         });
         
-        // Show corresponding content
         const tabId = tab.getAttribute('data-tab');
         document.getElementById(`${tabId}-content`).classList.add('active');
     });
 });
 
-// Initialize Swiper
 const swiper = new Swiper('.swiper', {
     slidesPerView: 1,
     spaceBetween: 30,
@@ -90,7 +80,6 @@ const swiper = new Swiper('.swiper', {
     }
 });
 
-// Scroll down button
 document.querySelector('.scroll-down').addEventListener('click', () => {
     window.scrollBy({
         top: window.innerHeight - 80,
@@ -98,7 +87,6 @@ document.querySelector('.scroll-down').addEventListener('click', () => {
     });
 });
 
-// Form submission
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const form = this;
@@ -116,7 +104,6 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         
         if (data.success) {
             form.reset();
-            // Автоматическое скрытие сообщения через 5 секунд
             setTimeout(() => {
                 messageDiv.style.opacity = '0';
             }, 5000);
@@ -128,7 +115,6 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     });
 });
 
-// Animate elements on scroll
 const animateOnScroll = () => {
     const elements = document.querySelectorAll('.service-card, .map-item, .about-image, .stat-item');
     
@@ -143,7 +129,6 @@ const animateOnScroll = () => {
     });
 };
 
-// Set initial state for animated elements
 document.querySelectorAll('.service-card, .map-item, .about-image, .stat-item').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';

@@ -1,7 +1,5 @@
 <?php
 header('Content-Type: application/json');
-
-// Проверяем, была ли уже отправлена форма
 session_start();
 if (isset($_SESSION['form_sent'])) {
     echo json_encode(['success' => false, 'message' => '❌ Форма уже была отправлена']);
@@ -45,15 +43,13 @@ $data = [
     'message' => trim($_POST['message'] ?? '')
 ];
 
-// Валидация
 if (empty($data['name']) || empty($data['email']) || empty($data['message'])) {
     echo json_encode(['success' => false, 'message' => '❌ Заполните все поля']);
     exit;
 }
 
-// Отправка
 if (sendToTelegram($data)) {
-    $_SESSION['form_sent'] = true; // Помечаем форму как отправленную
+    $_SESSION['form_sent'] = true;
     echo json_encode([
         'success' => true, 
         'message' => '<i class="fas fa-check-circle"></i> Сообщение успешно отправлено! Мы скоро свяжемся с вами.'
