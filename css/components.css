@@ -89,7 +89,7 @@ nav {
 /* Hero Section */
 .hero {
     height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('img/place-spawn\ 1.png') no-repeat center center/cover;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('img/place-spawn\ 1.jpg') no-repeat center center/cover;
     display: flex;
     align-items: center;
     text-align: center;
@@ -252,7 +252,7 @@ nav {
 }
 
 .map-selection::before {
-    background: url('img/ce9f55-Screenshot\ \(88\).jpg') no-repeat center center/cover;
+    background: url('img/ce9f55-Screenshot\ \(88\).png') no-repeat center center/cover;
     opacity: 0.05;
 }
 

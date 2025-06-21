@@ -99,24 +99,34 @@ document.querySelector('.scroll-down').addEventListener('click', () => {
 });
 
 // Form submission
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(contactForm);
-        const response = await fetch('send_email.php', {
-            method: 'POST',
-            body: formData
-        });
-        const result = await response.json();
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = this;
+    const formData = new FormData(form);
+    const messageDiv = document.getElementById('form-message');
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        messageDiv.innerHTML = data.message;
+        messageDiv.className = data.success ? 'success' : 'error';
         
-        const messageDiv = document.getElementById('form-message');
-        messageDiv.textContent = result.success || result.error;
-        messageDiv.style.color = result.success ? 'var(--accent)' : 'red';
-        
-        if (result.success) contactForm.reset();
+        if (data.success) {
+            form.reset();
+            // Автоматическое скрытие сообщения через 5 секунд
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+            }, 5000);
+        }
+    })
+    .catch(error => {
+        messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Произошла ошибка';
+        messageDiv.className = 'error';
     });
-}
+});
 
 // Animate elements on scroll
 const animateOnScroll = () => {

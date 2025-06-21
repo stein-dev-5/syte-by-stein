@@ -1,15 +1,28 @@
 <?php
 header('Content-Type: application/json');
 
+// Проверяем, была ли уже отправлена форма
+session_start();
+if (isset($_SESSION['form_sent'])) {
+    echo json_encode(['success' => false, 'message' => '❌ Форма уже была отправлена']);
+    exit;
+}
+
 function sendToTelegram($data) {
     $botToken = '7751603543:AAEx6r68poRTxEtApCSLiHgX_tjGANNvEKk';
     $chatId = '7466444398';
-    $url = "https://api.telegram.org/bot{$botToken}/sendMessage"; // Правильный URL Telegram API
+    $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
+
+    $text = "📢 <b>Новая заявка!</b>\n\n"
+          . "👤 <b>Имя:</b> " . htmlspecialchars($data['name']) . "\n"
+          . "📱 <b>Контакт:</b> " . htmlspecialchars($data['email']) . "\n"
+          . "✉️ <b>Сообщение:</b>\n" . htmlspecialchars($data['message']);
 
     $postData = [
         'chat_id' => $chatId,
-        'text' => "📢 Новая заявка!\nИмя: {$data['name']}\nКонтакт: {$data['email']}\nСообщение: {$data['message']}",
-        'parse_mode' => 'HTML'
+        'text' => $text,
+        'parse_mode' => 'HTML',
+        'disable_web_page_preview' => true
     ];
 
     $options = [
@@ -21,26 +34,34 @@ function sendToTelegram($data) {
     ];
 
     $context = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
+    $result = @file_get_contents($url, false, $context);
 
     return $result !== false;
 }
 
-// Основной код
 $data = [
-    'name' => $_POST['name'] ?? '',
-    'email' => $_POST['email'] ?? '',
-    'message' => $_POST['message'] ?? ''
+    'name' => trim($_POST['name'] ?? ''),
+    'email' => trim($_POST['email'] ?? ''),
+    'message' => trim($_POST['message'] ?? '')
 ];
 
+// Валидация
+if (empty($data['name']) || empty($data['email']) || empty($data['message'])) {
+    echo json_encode(['success' => false, 'message' => '❌ Заполните все поля']);
+    exit;
+}
+
+// Отправка
 if (sendToTelegram($data)) {
-    echo json_encode(['success' => true, 'message' => '✅ Сообщение отправлено!']);
+    $_SESSION['form_sent'] = true; // Помечаем форму как отправленную
+    echo json_encode([
+        'success' => true, 
+        'message' => '<i class="fas fa-check-circle"></i> Сообщение успешно отправлено! Мы скоро свяжемся с вами.'
+    ]);
 } else {
-    $error = error_get_last();
     echo json_encode([
         'success' => false, 
-        'message' => '❌ Ошибка отправки',
-        'debug' => $error['message'] ?? 'Unknown error'
+        'message' => '<i class="fas fa-exclamation-circle"></i> Ошибка отправки. Попробуйте позже.'
     ]);
 }
 ?>

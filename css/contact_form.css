@@ -1,0 +1,50 @@
+#form-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#form-message.success {
+    background-color: rgba(0, 204, 102, 0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#form-message.error {
+    background-color: rgba(255, 59, 48, 0.1);
+    border: 1px solid #ff3b30;
+    color: #ff3b30;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#form-message::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+}
+
+#form-message.success::before {
+    background-color: var(--accent);
+}
+
+#form-message.error::before {
+    background-color: #ff3b30;
+}
+
+/* Иконка */
+#form-message i {
+    margin-right: 8px;
+}
