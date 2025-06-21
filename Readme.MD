@@ -14,7 +14,7 @@
   - Анимации для hover-эффектов  
 
 🔹 **Результат**:  
-![Превью дизайна](https://via.placeholder.com/800x500/2A4365/FFFFFF?text=SteinTeams+Figma+Design)
+![Превью дизайна](/img_for_readme/figma.png)
 
 ---
 
@@ -71,12 +71,12 @@ C:\xampp\htdocs\
         Require all granted
     </Directory>
 </VirtualHost>
-
-Добавил в файл hosts:
-
+```
+- Добавил в файл hosts:
+```
 127.0.0.1 steinteams.zapto.org
-
- Проверка:
+```
+- Проверка:
 Сайт доступен по:
 
 http://steinteams.zapto.org
@@ -84,15 +84,17 @@ http://steinteams.zapto.org
 5. Настройка формы обратной связи
 🔹 HTML-форма:
 
-html
+```html
 <textarea name="message" placeholder="Сообщение" required></textarea>
 <button type="submit">Отправить</button>
+```
 🔹 Обработчик (send_email.php):
 
-php
+```php
 $botToken = 'ВАШ_ТОКЕН';
 $chatId = 'ВАШ_CHAT_ID';
 $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
+```
 6. Настройка Telegram-бота
 🔹 Действия:
 
