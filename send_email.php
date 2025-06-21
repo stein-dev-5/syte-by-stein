@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 function sendToTelegram($data) {
     $botToken = '7751603543:AAEx6r68poRTxEtApCSLiHgX_tjGANNvEKk';
     $chatId = '7466444398';
-    $url = "http://steinteams.zapto.org/send_email.php";
+    $url = "https://api.telegram.org/bot{$botToken}/sendMessage"; // Правильный URL Telegram API
 
     $postData = [
         'chat_id' => $chatId,
@@ -36,6 +36,11 @@ $data = [
 if (sendToTelegram($data)) {
     echo json_encode(['success' => true, 'message' => '✅ Сообщение отправлено!']);
 } else {
-    echo json_encode(['success' => false, 'message' => '❌ Ошибка отправки']);
+    $error = error_get_last();
+    echo json_encode([
+        'success' => false, 
+        'message' => '❌ Ошибка отправки',
+        'debug' => $error['message'] ?? 'Unknown error'
+    ]);
 }
 ?>
