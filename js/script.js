@@ -101,10 +101,20 @@ document.querySelector('.scroll-down').addEventListener('click', () => {
 // Form submission
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        alert('Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.');
-        contactForm.reset();
+        const formData = new FormData(contactForm);
+        const response = await fetch('send_email.php', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+        
+        const messageDiv = document.getElementById('form-message');
+        messageDiv.textContent = result.success || result.error;
+        messageDiv.style.color = result.success ? 'var(--accent)' : 'red';
+        
+        if (result.success) contactForm.reset();
     });
 }
 
@@ -132,3 +142,4 @@ document.querySelectorAll('.service-card, .map-item, .about-image, .stat-item').
 
 window.addEventListener('scroll', animateOnScroll);
 window.addEventListener('load', animateOnScroll);
+
