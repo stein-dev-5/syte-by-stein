@@ -52,12 +52,12 @@ if (sendToTelegram($data)) {
     $_SESSION['form_sent'] = true;
     echo json_encode([
         'success' => true, 
-        'message' => '<i class="fas fa-check-circle"></i> Сообщение успешно отправлено! Мы скоро свяжемся с вами.'
+        'message' => 'Сообщение успешно отправлено! Мы скоро свяжемся с вами.'
     ]);
 } else {
     echo json_encode([
         'success' => false, 
-        'message' => '<i class="fas fa-exclamation-circle"></i> Ошибка отправки. Попробуйте позже.'
+        'message' => 'Ошибка отправки. Попробуйте позже.'
     ]);
 }
 ?>
