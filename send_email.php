@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 session_start();
+
 if (isset($_SESSION['form_sent'])) {
     echo json_encode(['success' => false, 'message' => '❌ Форма уже была отправлена']);
     exit;
@@ -16,23 +17,19 @@ function sendToTelegram($data) {
           . "📱 <b>Контакт:</b> " . htmlspecialchars($data['email']) . "\n"
           . "✉️ <b>Сообщение:</b>\n" . htmlspecialchars($data['message']);
 
-    $postData = [
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
         'chat_id' => $chatId,
         'text' => $text,
         'parse_mode' => 'HTML',
         'disable_web_page_preview' => true
-    ];
-
-    $options = [
-        'http' => [
-            'method' => 'POST',
-            'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
-            'content' => http_build_query($postData)
-        ]
-    ];
-
-    $context = stream_context_create($options);
-    $result = @file_get_contents($url, false, $context);
+    ]));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+    $result = curl_exec($ch);
+    curl_close($ch);
 
     return $result !== false;
 }
@@ -50,14 +47,9 @@ if (empty($data['name']) || empty($data['email']) || empty($data['message'])) {
 
 if (sendToTelegram($data)) {
     $_SESSION['form_sent'] = true;
-    echo json_encode([
-        'success' => true, 
-        'message' => 'Сообщение успешно отправлено! Мы скоро свяжемся с вами.'
-    ]);
+    session_write_close();
+    echo json_encode(['success' => true, 'message' => '✅ Сообщение отправлено!']);
 } else {
-    echo json_encode([
-        'success' => false, 
-        'message' => 'Ошибка отправки. Попробуйте позже.'
-    ]);
+    echo json_encode(['success' => false, 'message' => '❌ Ошибка отправки. Попробуйте позже.']);
 }
 ?>
