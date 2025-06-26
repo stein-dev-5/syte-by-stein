@@ -417,7 +417,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         messageDiv.style.display = 'block';
         
         if (data.success) {
-            messageDiv.style.backgroundColor = '#e6f7ee';
+            messageDiv.style.backgroundColor = '#000';
             messageDiv.style.color = '#2ecc71';
             form.reset();
 
@@ -425,14 +425,14 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
                 messageDiv.style.display = 'none';
             }, 5000);
         } else {
-            messageDiv.style.backgroundColor = '#ffebee';
+            messageDiv.style.backgroundColor = '#000';
             messageDiv.style.color = '#e74c3c';
         }
     })
     .catch(error => {
         messageDiv.textContent = 'Ошибка соединения с сервером';
         messageDiv.style.display = 'block';
-        messageDiv.style.backgroundColor = '#ffebee';
+        messageDiv.style.backgroundColor = '#000';
         messageDiv.style.color = '#e74c3c';
     });
 });
