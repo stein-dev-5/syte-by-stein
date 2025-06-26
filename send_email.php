@@ -39,9 +39,12 @@ $data = [
     'email' => trim($_POST['email'] ?? ''),
     'message' => trim($_POST['message'] ?? '')
 ];
-
 if (empty($data['name']) || empty($data['email']) || empty($data['message'])) {
     echo json_encode(['success' => false, 'message' => '❌ Заполните все поля']);
+    exit;
+}
+if (!str_starts_with($data['email'], '@')) {
+    echo json_encode(['success' => false, 'message' => '❌ Telegram должен начинаться с @']);
     exit;
 }
 

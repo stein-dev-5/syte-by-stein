@@ -343,8 +343,15 @@
                 <div class="contact-form">
                     <form id="contactForm" action="send_email.php" method="POST">
                         <input type="text" name="name" placeholder="Как к вам обращаться?" required>
-                        <input type="text" name="email" placeholder="Ваш telegram" required>
-                        <textarea name="message" placeholder="Каким вы видете свой идеальный проект?" required></textarea>
+                        
+                        <div class="input-group">
+                            <input type="text" name="email" placeholder="Ваш telegram" required>
+                            <p class="error-message" style="display: none; color: red; margin-top: 5px; font-size: 14px;">
+                                Telegram должен начинаться с @
+                            </p>
+                        </div>
+                        
+                        <textarea name="message" placeholder="Каким вы видите свой идеальный проект?" required></textarea>
                         <button type="submit" class="btn">Отправить сообщение</button>
                     </form>
                     <div id="form-message"></div>
@@ -405,12 +412,15 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 <script>
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     const telegramInput = this.querySelector('input[name="email"]');
+    const errorMessage = this.querySelector('.error-message');
     const telegramValue = telegramInput.value.trim();
     
     if (!telegramValue.startsWith('@')) {
         e.preventDefault();
-        alert('Telegram должен начинаться с @');
+        errorMessage.style.display = 'block';
         telegramInput.focus();
+    } else {
+        errorMessage.style.display = 'none';
     }
 });
 </script>

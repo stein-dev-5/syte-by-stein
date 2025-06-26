@@ -90,27 +90,44 @@ document.querySelector('.scroll-down').addEventListener('click', () => {
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const form = this;
-    const formData = new FormData(form);
+    const telegramInput = form.querySelector('input[name="email"]');
+    const errorMessage = form.querySelector('.error-message');
     const messageDiv = document.getElementById('form-message');
+    const telegramValue = telegramInput.value.trim();
 
+    errorMessage.style.display = 'none';
+    messageDiv.textContent = '';
+    messageDiv.className = '';
+
+    if (!telegramValue.startsWith('@')) {
+        errorMessage.style.display = 'block';
+        telegramInput.focus();
+        return; 
+    }
+
+    const formData = new FormData(form);
+    
     fetch(form.action, {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Network error');
+        return response.json();
+    })
     .then(data => {
-        messageDiv.innerHTML = data.message;
+        messageDiv.textContent = data.message;
         messageDiv.className = data.success ? 'success' : 'error';
-        
+
         if (data.success) {
-            form.reset();
+            form.reset(); 
             setTimeout(() => {
                 messageDiv.style.opacity = '0';
-            }, 5000);
+            }, 5000); 
         }
     })
     .catch(error => {
-        messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Произошла ошибка';
+        messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Ошибка соединения';
         messageDiv.className = 'error';
     });
 });
