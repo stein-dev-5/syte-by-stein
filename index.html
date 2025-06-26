@@ -402,3 +402,15 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     });
 });
 </script>
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    const telegramInput = this.querySelector('input[name="email"]');
+    const telegramValue = telegramInput.value.trim();
+    
+    if (!telegramValue.startsWith('@')) {
+        e.preventDefault();
+        alert('Telegram должен начинаться с @');
+        telegramInput.focus();
+    }
+});
+</script>
